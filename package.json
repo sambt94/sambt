@@ -4,7 +4,7 @@
   "scripts": {
     "lint": "eslint './apps/*/src/**/*.{ts,tsx}' './packages/*/src/**/*.{ts,tsx}' --max-warnings 0",
     "typecheck": "pnpm -r tsc --noEmit",
-    "test": "",
+    "test": "echo \"No tests yet\" && exit 0",
     "prepare": "husky"
   },
   "lint-staged": {
