@@ -2,7 +2,7 @@
   "name": "pulss",
   "private": true,
   "scripts": {
-    "lint": "eslint '**/*.{ts,tsx,js,cjs,mjs}' --max-warnings 0",
+    "lint": "eslint './apps/*/src/**/*.{ts,tsx}' './packages/*/src/**/*.{ts,tsx}' --max-warnings 0",
     "typecheck": "pnpm -r tsc --noEmit",
     "test": ""
   },
