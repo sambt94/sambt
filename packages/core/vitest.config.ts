@@ -1,4 +1,5 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vite';
+import { configDefaults } from 'vitest/config';
 
 export default defineConfig({
   test: {
@@ -9,4 +10,3 @@ export default defineConfig({
     },
   },
 });
-EOL < /dev/null

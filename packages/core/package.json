@@ -20,4 +20,3 @@
     "vitest": "^1.4.0"
   }
 }
-EOL < /dev/null
