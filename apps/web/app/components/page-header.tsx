@@ -1,8 +1,8 @@
 // ABOUTME: Shared page header with serif title and optional subtitle.
-// ABOUTME: Uses responsive clamp() sizing matching v4 design.
+// ABOUTME: Accepts string or ReactNode title (for WordReveal animation).
 
 interface PageHeaderProps {
-  title: string;
+  title: React.ReactNode;
   subtitle?: string;
 }
 

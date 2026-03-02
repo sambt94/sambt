@@ -11,7 +11,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="fixed top-sm right-sm sm:top-md sm:right-md z-[101] flex items-center gap-2 text-xs text-muted cursor-pointer select-none group opacity-0 animate-fade-in"
+      className="theme-toggle-fixed fixed top-sm right-sm sm:top-md sm:right-md z-[101] flex items-center gap-2 text-xs text-muted cursor-pointer select-none group opacity-0 animate-fade-in"
       style={{ animationDelay: '1.2s' }}
       aria-label={label}
     >

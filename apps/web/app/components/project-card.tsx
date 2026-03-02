@@ -1,5 +1,5 @@
 // ABOUTME: Project card component for displaying personal projects.
-// ABOUTME: Shows project name, description, and tech stack in a grid layout.
+// ABOUTME: Bordered cards with hover-dim sibling effect in a grid layout.
 
 interface ProjectCardProps {
   name: string;
@@ -8,15 +8,15 @@ interface ProjectCardProps {
 }
 
 export function ProjectGrid({ children }: { children: React.ReactNode }) {
-  return <div className="grid grid-cols-1 sm:grid-cols-2 gap-lg">{children}</div>;
+  return <div className="grid grid-cols-1 sm:grid-cols-2 gap-lg hover-dim-group">{children}</div>;
 }
 
 export function ProjectCard({ name, description, stack }: ProjectCardProps) {
   return (
-    <div className="space-y-xs">
-      <h3 className="text-copy text-sm font-medium">{name}</h3>
-      <p className="text-sm text-muted leading-relaxed">{description}</p>
-      <p className="text-xs text-faint">{stack}</p>
+    <div className="flex flex-col p-md border border-border rounded-lg transition-colors duration-300 hover:border-faint">
+      <h3 className="text-copy text-base font-normal mb-xs">{name}</h3>
+      <p className="text-sm text-muted leading-relaxed flex-1 mb-xs">{description}</p>
+      <p className="text-xs text-faint italic">{stack}</p>
     </div>
   );
 }

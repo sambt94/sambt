@@ -36,13 +36,13 @@ export default {
         'fade-in': {
           '0%': {
             opacity: '0',
-            filter: 'blur(8px)',
-            transform: 'translateY(12px)',
+            filter: 'blur(12px)',
+            transform: 'scale(0.98) translateY(8px)',
           },
           '100%': {
             opacity: '1',
             filter: 'blur(0)',
-            transform: 'translateY(0)',
+            transform: 'scale(1) translateY(0)',
           },
         },
         'nav-entrance': {
@@ -56,10 +56,15 @@ export default {
             filter: 'blur(0)',
           },
         },
+        'word-reveal': {
+          '0%': { color: 'var(--color-muted)' },
+          '100%': { color: 'var(--color-copy)' },
+        },
       },
       animation: {
-        'fade-in': 'fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'fade-in': 'fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both',
         'nav-entrance': 'nav-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards',
+        'word-reveal': 'word-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       },
       transitionDuration: {
         '400': '400ms',

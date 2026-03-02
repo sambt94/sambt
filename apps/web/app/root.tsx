@@ -9,6 +9,7 @@ import './tailwind.css';
 import { ThemeProvider } from '~/components/theme-provider';
 import { ThemeToggle } from '~/components/theme-toggle';
 import { Nav } from '~/components/nav';
+import { SiteHeader } from '~/components/site-header';
 
 export const links: LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -36,6 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <ThemeProvider>
           <ThemeToggle />
           <Nav />
+          <SiteHeader />
           {children}
         </ThemeProvider>
         <ScrollRestoration />
