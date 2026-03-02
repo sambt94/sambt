@@ -1,5 +1,5 @@
 {
-  "name": "samcodes",
+  "name": "sambt",
   "private": true,
   "scripts": {
     "lint": "eslint './apps/*/app/**/*.{ts,tsx}' --max-warnings 0",

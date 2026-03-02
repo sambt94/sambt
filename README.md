@@ -1,4 +1,4 @@
-# samcodes
+# sambt
 
 Personal monorepo for Sam Beattie's projects.
 
