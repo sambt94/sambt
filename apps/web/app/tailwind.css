@@ -1,12 +1,37 @@
+/* ABOUTME: Base Tailwind styles with sambt.dev design system defaults. */
+/* ABOUTME: CSS variables for dark/light theming, toggled by .light class on <html>. */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  @apply bg-white dark:bg-gray-950;
+@layer base {
+  :root {
+    --color-surface: #0e0e0e;
+    --color-copy: #e8e8e8;
+    --color-muted: #bbb;
+    --color-faint: #666;
+    --color-border: #222;
+    --color-pill: rgba(255, 255, 255, 0.08);
+    --color-nav-bg: rgba(14, 14, 14, 0.7);
+    --color-nav-border: rgba(255, 255, 255, 0.06);
+  }
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
+  .light {
+    --color-surface: #f5efe4;
+    --color-copy: #1a1a1a;
+    --color-muted: #444;
+    --color-faint: #999;
+    --color-border: #e0d8cb;
+    --color-pill: rgba(0, 0, 0, 0.07);
+    --color-nav-bg: rgba(245, 239, 228, 0.7);
+    --color-nav-border: rgba(0, 0, 0, 0.08);
+  }
+
+  body {
+    @apply bg-surface text-copy font-sans font-light antialiased;
+    font-size: 15px;
+    line-height: 1.6;
+    @apply transition-colors duration-500 ease-smooth;
   }
 }
