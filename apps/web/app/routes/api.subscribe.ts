@@ -1,11 +1,13 @@
 // ABOUTME: Server-side API route for email subscriptions via Resend.
-// ABOUTME: Accepts POST with email, creates contact then adds to Newsletter segment.
+// ABOUTME: Accepts POST with email, creates contact, adds to Newsletter segment, and sends welcome email.
 
 import type { ActionFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
+import { WELCOME_EMAIL_SUBJECT, WELCOME_EMAIL_TEXT, WELCOME_EMAIL_HTML } from '~/lib/welcome-email';
 
 const RESEND_API_URL = 'https://api.resend.com';
 const NEWSLETTER_SEGMENT_ID = '481a510a-a075-4cbb-a941-5571ec3a6f26';
+const FROM_EMAIL = 'Sam Middleton Beattie <sam@sambt.dev>';
 
 export async function action({ request }: ActionFunctionArgs) {
   if (request.method !== 'POST') {
@@ -36,6 +38,8 @@ export async function action({ request }: ActionFunctionArgs) {
       body: JSON.stringify({ email }),
     });
 
+    const isNewContact = createRes.ok;
+
     if (!createRes.ok) {
       const err = await createRes.text();
       // 409 means contact already exists — that's fine, continue to add segment
@@ -61,6 +65,30 @@ export async function action({ request }: ActionFunctionArgs) {
       const err = await segmentRes.text();
       console.error('Resend add to segment failed:', err);
       return json({ error: 'Failed to subscribe' }, { status: 500 });
+    }
+
+    // Step 3: Send welcome email (only for new subscribers)
+    if (isNewContact) {
+      const emailRes = await fetch(`${RESEND_API_URL}/emails`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: FROM_EMAIL,
+          to: [email],
+          subject: WELCOME_EMAIL_SUBJECT,
+          html: WELCOME_EMAIL_HTML,
+          text: WELCOME_EMAIL_TEXT,
+        }),
+      });
+
+      if (!emailRes.ok) {
+        // Log but don't fail the subscription — contact is already created
+        const err = await emailRes.text();
+        console.error('Resend welcome email failed:', err);
+      }
     }
 
     return json({ success: true });
