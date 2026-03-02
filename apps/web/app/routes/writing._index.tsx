@@ -12,7 +12,7 @@ export const meta: MetaFunction = () =>
   buildMeta({
     title: 'Writing',
     description:
-      'Essays and case studies about building with AI, product strategy, and learning to work differently.',
+      'Writing about what happens when your job starts changing underneath you — and what you can build when it does.',
     path: '/writing',
   });
 
@@ -21,12 +21,11 @@ export default function WritingIndex() {
 
   return (
     <PageContainer>
-      <PageHeader
-        title="Writing"
-        subtitle="Essays and case studies about building with AI, product strategy, and learning to work differently."
-      />
-
-      <div className="opacity-0 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+      <div className="stagger-children">
+        <PageHeader
+          title="Writing"
+          subtitle="Writing about what happens when your job starts changing underneath you — and what you can build when it does. More coming soon."
+        />
         {articles.length > 0 ? (
           <div>
             {articles.map(article => (

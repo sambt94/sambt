@@ -2,5 +2,5 @@
 // ABOUTME: Wraps all page content with consistent padding and width constraint.
 
 export function PageContainer({ children }: { children: React.ReactNode }) {
-  return <main className="max-w-content mx-auto px-sm sm:px-md pt-xl pb-xl">{children}</main>;
+  return <main className="max-w-content mx-auto px-sm sm:px-md pb-xl">{children}</main>;
 }

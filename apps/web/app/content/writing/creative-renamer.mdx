@@ -1,36 +1,47 @@
 ---
-title: "Automated File Namer"
+title: "My first production code — an automated file renamer for Google Drive"
 type: "case-study"
 date: "2026-02-25"
-summary: "My first production code — a Google Apps Script that auto-renames files across 100+ nested Drive folders. Built with Claude, rebuilt with Claude Code."
+summary: "How I built a Google Apps Script that auto-renames files across 100+ nested Drive folders. Built with Claude, rebuilt with Claude Code."
 tags: ["Google Apps Script", "Drive API", "AI", "production"]
 status: "published"
 ---
 
-**Role:** Solo build · Internal tool
-**Timeline:** Nov 2024 – ongoing
-**Stack:** `Google Apps Script` · `Drive Activity API` · `Google Sheets`
-**Code:** [github.com/sambt94/creative-file-renamer](https://github.com/sambt94/creative-file-renamer)
+3 months ago, before the most recent AI releases, I felt like I'd been falling behind a bit. With Pulss, I'd been free to go deep into MCPs and capabilities that had previously been out of reach. But in a full time role, there was understandably much less time for experimenting. So when the chance came, I went all-in on actually building something.
+
+I figured that, even if I failed, it would be a good learning experience all the same.
 
 ---
 
-### How I got involved
+### An automated naming system for Google Drive files
 
-I don't have a computer science background. I came to this from the marketing and product side — the kind of person who uses tools, not builds them.
+Like everyone else in late 2025, I was exposed to crazy LinkedIn posts about people vibe-coding entire startups, or building automations on n8n that could automate multi-million dollar business functions in a matter of days.
 
-But I'd spent months figuring out how to work effectively with Claude, particularly around Notion workflows. When a creative production team needed someone to automate their file naming process, I was recommended — not because I could code, but because I'd shown I could get things done with AI tools.
+Particularly at that moment in time, this felt like all click-bait and very little substance.
 
-I said yes because I wanted to try. I had no idea if I could actually build something that a team would use in production. That uncertainty was the point.
+I'd already done some cool stuff with AI. I was a keen MCP user, turning to Claude to interact with databases for analyses that would have taken me weeks or been out of reach entirely. I'd also set up a nice workflow where I could work with Claude on projects and push content to Notion. This saved a lot of time, particularly when creating databases in Notion, which I'd always found to be time consuming and often messy.
+
+It was the latter that got me involved in this project. I was working alongside a large creative team, who produced lots of images and videos but struggled to maintain a naming structure — particularly because it feeds into other business systems. They wanted a Notion database with charts on top that could measure output and keep file naming in check.
+
+What seemed like a simple request quickly grew to require an approach that automatically renamed all files within a massive Google Drive folder structure. I stayed onboard — it was a chance to really push what I could do with AI, at a time when I wasn't getting many of those.
+
+---
+
+### Choosing the tools
+
+The first thing I did was drop Notion. I'd built a proof of concept there, with a database and accompanying charts, but with the team working entirely in Google Drive, it made no sense to involve another tool.
+
+I evaluated n8n, but was wary about using it for production. I'd watched various YouTube tutorials and set up some working automations before, but these always seemed to overpromise and underdeliver. In my personal experience, n8n flows were brittle in a way I couldn't quite put my finger on.
+
+Apps Script made sense because it was part of Google Workspace. No external tools, no additional access to configure, and it could talk to Drive and Sheets natively. I'd never used Apps Script or any JavaScript beyond a handful of coding challenges, but this was a chance to push myself and Claude to the limit.
 
 ---
 
 ### The problem
 
-The team was dealing with hundreds of creative files spread across deeply nested Google Drive folders. Files came in with names like `final_v3_REAL.psd`, `banner copy (2).png`, or just unnamed exports from Figma.
+The team was dealing with hundreds of creative files spread across deeply nested Google Drive folders. Files came in with names like *final\_v3\_REAL.psd*, *banner copy (2).png*, or just unnamed exports.
 
-They had a naming convention defined. Nobody followed it. Renaming files manually across 100+ folders was tedious enough that people just didn't do it. Finding the right asset meant digging through folders. Auditing what had been delivered was guesswork.
-
-The naming convention existed on paper but not in practice.
+They were creating a new naming convention, but it was time consuming for designers who were being pushed for faster output. But file names also fed into vital data systems, so having files that didn't follow the proper naming convention could have major consequences downstream.
 
 ---
 
@@ -38,66 +49,56 @@ The naming convention existed on paper but not in practice.
 
 This was my first real project built through conversation with an AI. I didn't write code in the traditional sense — I described what I needed, Claude generated it, I tested it, found where it broke, described the problem, and iterated.
 
-The core idea was simple: the folder structure already encodes metadata. A file sitting at `Brand / Angle / Audience / Problem / Message / Language /` should be named `brand_angle_audience_problem_message_language_designer-inputs.ext`. The system just needed to read the folder path, extract each level, and rename the file automatically. Designers upload to the right folder — the system does the rest.
+The core idea was simple: the folder structure already encodes metadata. A file sitting in a deeply nested folder path gets renamed based on each level of the path. The system reads the folder path, extracts each level, and builds the new name. The last part is what the owner adds themselves when they upload the file — a unique identifier for their work. Owners upload to the right folder, add their identifier, and the system does the rest.
 
-What wasn't simple was getting it to work reliably at scale. The architecture went through five versions:
+#### From proof of concept to production tool
 
-| Version | What changed | What I learned |
-|---------|-------------|----------------|
-| POC | Recursive folder scan every 5 min | The concept works — on 10 folders |
-| V1 | Unified script + Google Sheets logging | The team prefers Sheets over Notion |
-| V2 | Added snapshots, state tracking, dashboards | I was building too much |
-| V3.1 | Stripped back to rename + log only | Focus on the core value |
-| V5 | Switched to Drive Activity API | The real architectural breakthrough |
+For the first version, I spun up a mock folder structure in my own Google Drive and played around adding photos of my dog and seeing if they would be renamed. It seemed to work.
 
-Each version taught me something, and not always about code.
+Moving it into production quickly taught me that getting this right would take more iterations — and more back-and-forth with the team — than I'd expected. Each version taught me something, and not always about code.
 
-**Hitting the wall with performance.** The POC scanned every folder on every run. That works for a test folder with 10 subfolders. It doesn't work for 100+ folders when Google Apps Script gives you a 6-minute execution limit. I went through folder path caching, ancestor shortcutting, and eventually landed on the Drive Activity API — which flipped the whole approach. Instead of scanning all folders looking for new files, I asked Google "what files had activity recently?" and only processed those. That was the real breakthrough.
+The original approach was recursive folder scanning, with the script walking up the tree to find changes. In a massive folder structure, this quickly becomes unviable. Apps Script times out after 6 minutes, and with new files being added every hour, this approach wouldn't work.
 
-**Building too much, then cutting back.** V2 was ambitious. Historical snapshots, file state tracking, reporting dashboards — I was designing a full production tracking system. It took months to realise the team needed one thing: files renamed correctly. V3.1 stripped everything else away. The tracking ambitions were interesting engineering problems, but they weren't what the team was waiting for.
+I first tried caching, which improved run times. However, it quickly became clear that caching was vulnerable to human error. Say a designer put a file in the wrong folder — it would get renamed based on the wrong path, and even when moved, it would retain the incorrect name.
 
-**Making it work in the real world.** My proof of concept ran on my personal Google account with test files I created. Production meant shared drives, different file ownership, folders created by different team members, and files at unexpected depths. The pragmatic answer: validate and flag issues, but rename anyway. A file with a slightly wrong name is better than a file with no name.
+Getting it right required a completely different approach — the Drive Activity API. I'd initially opted against it because it didn't seem like it would be rigorous enough to catch all the uploads. But instead of scanning folders, it asks Google "what files had activity recently?" and only processes those. That solved the core scaling problem.
+
+It came with its own challenges though. The API would flag all activity, and was limited in how you could control it. The search kept timing out, which I eventually discovered was because it was scanning every file shared with my user — not just the folder my script worked on.
+
+The solution was to severely limit the scope. I set up triggers to check activity every 15 minutes with a 30 minute lookback window, so each run overlapped with the last. Then I moved the script to a dedicated automation account with very strictly defined access. When the script ran from that account, it could only see the files it was designed to work on.
+
+#### Designing for humans
+
+Human error and edge cases could never be fully eliminated. That's why I set up error logging and email alerts for the team lead — flagging when the renamer ran into problems, when it timed out, or when designers had uploaded to the wrong folder or without the required inputs.
+
+The pragmatic answer I landed on for most edge cases: validate inputs, flag clear errors, and rename what you can. A file with a timestamped placeholder name is better than a file with no name at all.
 
 ---
 
 ### The result
 
-The script runs every 15 minutes on a scheduled trigger. It's been zero maintenance since deployment.
-
-- Eliminates manual file renaming across 100+ nested folders
-- Processes files in 2-5 minutes per run
-- Full audit trail — every rename is logged with old name, new name, and folder path
-- The team finds any asset in seconds through consistent, structured naming
+The script ran every 15 minutes on a scheduled trigger. It processes files in 2-5 minutes per run, logs every rename with old name, new name, and folder path, and the team can now find any asset in seconds.
 
 It's "just" an Apps Script. But it solved a real problem for a real team, and it's been running quietly in the background ever since.
 
 ---
 
-### Rebuilding it
+### Coming back to it
 
-Months later, I came back to this project — but with different tools.
+Months later, I came back to this project to write this case study. Barely three months, but a lot has changed.
 
-The original was built through chat conversations with Claude. Long back-and-forth threads where I'd describe a problem, get code back, paste it into the Apps Script editor, test it, find issues, and iterate. It worked, but it was slow and I was always context-switching between the conversation and the editor.
+The original was built through chat conversations with Claude. Long back-and-forth threads where I'd describe a problem, get code back, paste it into the Apps Script editor, test it, find issues, and go again. It worked, but it was slow and I was always context-switching between the conversation and the editor.
 
-This time I used Claude Code with Opus. The difference was immediate. Instead of chat-based iteration, I had a structured engineering workflow — security reviews, code quality checks, parallel analysis that ran simultaneously. In one session, I:
-
-- Rebuilt the script for a public GitHub repo — stripping private data, generalising the field names, writing full documentation
-- Ran a security review that found real vulnerabilities (spreadsheet formula injection via crafted filenames — something I'd never have thought to check)
-- Ran a code review that identified performance bottlenecks (the script was opening the spreadsheet separately for every single file rename)
-- Built a one-click demo setup — helper functions that create the folder structure and logging spreadsheet automatically
-
-The security findings were genuinely surprising. A filename like `=HYPERLINK("evil.com","click")` would get written straight into the spreadsheet and execute as a formula. That's the kind of issue that separates "it works" from "it works safely."
+Now, not only am I more confident with Claude Code, local files and git, but Claude Code and Opus 4.6 are in a completely different league. I've been able to rebuild this entire project from memory, recreating it in an anonymised demo version with full documentation, a one-click setup, and improvements I wouldn't have known to make the first time around. Code quality checks, security reviews, performance optimisations — all things that were beyond me three months ago.
 
 ---
 
 ### What I learned
 
-This project spans about 14 months, from a proof of concept I wasn't sure I could build to a public GitHub repo with documentation, security hardening, and a demo.
+This project was my first foray into solo building something that other people actually use. For experienced engineers, this might not seem like much. But for me, it changed things — going from a proof of concept I wasn't sure I could build, to a public GitHub repo.
 
-The technical stuff matters — the Activity API, folder caching, batch writes. But the real lesson is about what's possible when you combine domain knowledge with AI tools. I understood the problem deeply because I'd worked in production teams. I didn't know how to write the solution. Claude bridged that gap — first through conversation, then through a more structured workflow.
+Claude was doing most of the heavy lifting technically — I won't pretend otherwise. But I'm proud of how I researched, designed the solution, iterated, chose the tools, and just threw myself into it. It was a real "I can do this" moment, but it didn't feel like AI did it all. I didn't feel like my job was being taken, more that I was enabled to solve a genuine problem and apply the best of my skills — the product thinking, the research, the iteration — alongside a capable colleague.
 
-Building with AI isn't magic. It's a lot of iteration, a lot of "that didn't work, let's try this instead," and a lot of learning to ask the right questions. But it means someone with a non-technical background can build real tools that solve real problems. That's a big deal.
+Building with AI isn't magic. It's a lot of iteration, a lot of "that didn't work, let's try this instead," and learning to ask better questions over time. But it means that I — with no technical background — can build real tools that solve real problems. Whatever happens next, I think that's pretty cool.
 
----
-
-*See the [full source code and technical documentation](https://github.com/sambt94/creative-file-renamer) on GitHub.*
+*[Full source code and technical documentation on GitHub →](https://github.com/sambt94/creative-file-renamer)*

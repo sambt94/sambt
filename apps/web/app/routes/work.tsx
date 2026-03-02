@@ -19,9 +19,8 @@ export const meta: MetaFunction = () =>
 export default function Work() {
   return (
     <PageContainer>
-      <PageHeader title="Curriculum Vitae" subtitle="The full professional timeline." />
-
-      <div className="space-y-xl opacity-0 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+      <div className="space-y-xl stagger-children">
+        <PageHeader title="Experience" subtitle="The full professional timeline." />
         {/* Experience */}
         <section>
           <h2 className="text-xs font-normal text-muted uppercase tracking-widest mb-md">
@@ -31,7 +30,7 @@ export default function Work() {
             <TimelineEntry
               date="Jun 2025 — Jan 2026"
               title="Product & Growth Lead"
-              company="Best.me (Nutrameg)"
+              company="Health & Wellness Startup"
             >
               <li>
                 Designed a personalised in-app activation initiative and proved its impact on user

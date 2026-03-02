@@ -4,7 +4,7 @@
 import { useState } from 'react';
 
 export function Accordion({ children }: { children: React.ReactNode }) {
-  return <div className="border-t border-border">{children}</div>;
+  return <div className="border-t border-border hover-dim-group">{children}</div>;
 }
 
 interface AccordionItemProps {
