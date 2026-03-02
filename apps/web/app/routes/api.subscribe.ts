@@ -68,8 +68,9 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     // Step 3: Send welcome email (only for new subscribers)
-    let emailStatus = 'skipped';
+    // Brief pause to avoid Resend's 2 req/sec rate limit after Steps 1+2
     if (isNewContact) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
       const emailRes = await fetch(`${RESEND_API_URL}/emails`, {
         method: 'POST',
         headers: {
@@ -85,20 +86,14 @@ export async function action({ request }: ActionFunctionArgs) {
         }),
       });
 
-      if (emailRes.ok) {
-        emailStatus = 'sent';
-      } else {
+      if (!emailRes.ok) {
         // Log but don't fail the subscription — contact is already created
         const err = await emailRes.text();
-        emailStatus = `failed: ${emailRes.status} ${err}`;
         console.error('Resend welcome email failed:', err);
       }
     }
 
-    return json({
-      success: true,
-      debug: { isNewContact, emailStatus, createStatus: createRes.status },
-    });
+    return json({ success: true });
   } catch (error) {
     console.error('Subscribe error:', error);
     return json({ error: 'Something went wrong' }, { status: 500 });
