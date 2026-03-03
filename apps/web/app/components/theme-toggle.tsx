@@ -1,5 +1,5 @@
 // ABOUTME: Dark/light theme toggle button with sun/moon icon.
-// ABOUTME: Shows label on hover, positioned top-right with fade-in entrance.
+// ABOUTME: Fixed top-right on desktop, flows at bottom of content on mobile.
 
 import { useTheme } from './theme-provider';
 
@@ -11,7 +11,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="fixed bottom-sm left-1/2 -translate-x-1/2 z-[101] flex items-center gap-2 text-xs text-muted cursor-pointer select-none group opacity-0 animate-fade-in"
+      className="sm:fixed sm:top-sm sm:right-sm z-[101] flex items-center gap-2 text-xs text-muted cursor-pointer select-none group opacity-0 animate-fade-in"
       style={{ animationDelay: '1.2s' }}
       aria-label={label}
     >

@@ -37,10 +37,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ThemeProvider>
-          <ThemeToggle />
           <Nav />
           <SiteHeader />
           {children}
+          <div className="max-w-content mx-auto px-md pb-lg sm:p-0">
+            <ThemeToggle />
+          </div>
         </ThemeProvider>
         <ScrollRestoration />
         <Analytics />
