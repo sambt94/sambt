@@ -25,10 +25,11 @@ export default function ProjectsPage() {
 
         <ProjectStack>
           <ProjectCard
-            name="Hand-Drawn to Diagram"
-            description="A reMarkable tablet tool that turns rough pen sketches into polished diagrams. Extracts strokes from the tablet, interprets the drawing with AI, and generates clean SVG output."
-            stack="reMarkable API · AI · SVG · Python"
-            comingSoon
+            name="Handwriting & Drawings to Notes & Diagrams"
+            description="An MCP server that gives Claude direct access to reMarkable tablet notebooks. Transcribes handwritten notes into clean Markdown and converts hand-drawn diagrams into editable Excalidraw files. Everything runs locally — no API keys, no cloud."
+            stack="Python · MCP · Claude Vision · Excalidraw · Obsidian"
+            href="/writing/remarkable-workflow"
+            githubHref="https://github.com/sambt94/remarkable-mcp"
           />
           <ProjectCard
             name="Making Data Accessible"

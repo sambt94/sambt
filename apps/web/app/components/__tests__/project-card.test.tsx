@@ -96,6 +96,29 @@ describe('ProjectCard', () => {
     expect(heading.closest('a')).toBeNull();
   });
 
+  it('renders a GitHub link when githubHref is provided', () => {
+    renderCard({
+      name: 'Open Source Project',
+      description: 'Has a repo',
+      stack: 'Python · MCP',
+      href: '/writing/open-source',
+      githubHref: 'https://github.com/sambt94/open-source',
+    });
+    const githubLink = screen.getByText(/GitHub/);
+    expect(githubLink.tagName).toBe('A');
+    expect(githubLink.getAttribute('href')).toBe('https://github.com/sambt94/open-source');
+    expect(githubLink.getAttribute('target')).toBe('_blank');
+  });
+
+  it('does not render a GitHub link when githubHref is not provided', () => {
+    renderCard({
+      name: 'No Repo Project',
+      description: 'Private project',
+      stack: 'Some Tech',
+    });
+    expect(screen.queryByText(/GitHub/)).toBeNull();
+  });
+
   it('renders multiple project cards in a stack', () => {
     render(
       <MemoryRouter>

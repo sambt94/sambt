@@ -121,7 +121,7 @@ describe('Route: Projects', () => {
 
   it('renders all project cards', () => {
     renderRoute(<ProjectsPage />);
-    expect(screen.getByText('Hand-Drawn to Diagram')).toBeDefined();
+    expect(screen.getByText('Handwriting & Drawings to Notes & Diagrams')).toBeDefined();
     expect(screen.getByText('Making Data Accessible')).toBeDefined();
     expect(screen.getByText('Modular Email Design System')).toBeDefined();
     expect(screen.getByText('Weekly Meal Planner')).toBeDefined();
