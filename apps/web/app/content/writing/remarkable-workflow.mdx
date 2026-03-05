@@ -1,5 +1,5 @@
 ---
-title: "reMarkable → Obsidian"
+title: "Turning Bad Handwriting Into Editable Docs"
 type: "case-study"
 date: "2026-03-05"
 summary: "Handwritten notes from a reMarkable tablet, transcribed by Claude and saved as searchable Markdown. Bridging the gap between thinking on paper and working with AI."
@@ -43,11 +43,9 @@ The reMarkable desktop app syncs your notebooks to a local cache on your machine
 
 With Claude Code, I built a pipeline that finds synced notebooks in the local cache, converts the reMarkable's proprietary `.rm` files into PDFs (via SVG, using a couple of open-source libraries), and feeds them to Claude for transcription. The output gets saved as Markdown files in my Obsidian vault. Searchable, linkable, and alongside everything else I work on.
 
-If you want the full technical detail, it's in the [project README](https://github.com/sambt94/remarkable-mcp).
-
 ![Handwritten reMarkable notes](/images/writing/remarkable-page-53.png)
 
-In fact, the first draft of this article started life as scribbled notes on my reMarkable. It went through the same pipeline — rendered, transcribed, saved as a Markdown file — and then I continued editing from there.
+In fact, the first draft of this article started life as scribbled notes on my reMarkable. It went through the same pipeline — rendered, transcribed, saved as a Markdown file — and then I continued editing from there. If you want the full technical detail, it's in the [project README](https://github.com/sambt94/remarkable-mcp).
 
 ---
 
